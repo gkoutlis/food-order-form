@@ -1,0 +1,401 @@
+/* style.css
+  Τι κάνει αυτό το αρχείο:
+  - Ορίζει χρωματική παλέτα τύπου McDonald's (κόκκινο/κίτρινο).
+  - Σχεδιάζει τα panels, κάρτες προϊόντων, καλάθι.
+  - Φτιάχνει έντονο pixel-art background με 1 μόνο animation (scroll).
+*/
+
+/* (1) Βασικά χρώματα/μεταβλητές (McDonald's vibe) */
+:root{
+  --mcd-red: #DA291C;
+  --mcd-yellow: #FFC72C;
+  --mcd-dark: #111111;
+  --mcd-white: #ffffff;
+
+  --shadow: 0 16px 40px rgba(0,0,0,0.20);
+}
+
+/* (2) Γενικές ρυθμίσεις */
+*{ box-sizing: border-box; }
+
+body{
+  margin: 0;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+
+  /* (2.1) Κόκκινο φόντο με λίγο “φως” από κίτρινο */
+  background:
+    radial-gradient(900px 520px at 12% 10%, rgba(255,199,44,0.35), transparent 60%),
+    radial-gradient(900px 520px at 90% 30%, rgba(255,199,44,0.25), transparent 60%),
+    linear-gradient(135deg, #b81f15, var(--mcd-red));
+
+  color: var(--mcd-dark);
+  overflow-x: hidden;
+}
+
+.container-max{ max-width: 1200px; }
+
+/* (3) Pixel-art background (1 layer, 1 animation)
+   - “Πιο έντονο”: μεγαλύτερη opacity, πιο μεγάλα sprites, πιο γρήγορη κύλιση.
+   - “Πιο καθαρό pixel art”: SVG με shape-rendering=crispEdges, χωρίς blur/swirl. */
+.pixel-bg{
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+
+  /* (3.1) Ένα SVG tile που περιέχει burger + fries + drink σε καθαρό pixel στυλ */
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='128' height='128' shape-rendering='crispEdges'%3E%3Crect width='128' height='128' fill='none'/%3E%3C!-- BURGER --%3E%3Crect x='18' y='22' width='44' height='10' fill='%23FFC72C'/%3E%3Crect x='18' y='32' width='44' height='6' fill='%23E0A800'/%3E%3Crect x='18' y='38' width='44' height='4' fill='%23DA291C'/%3E%3Crect x='18' y='42' width='44' height='8' fill='%237a4a21'/%3E%3Crect x='18' y='50' width='44' height='8' fill='%23FFC72C'/%3E%3C!-- FRIES --%3E%3Crect x='86' y='18' width='6' height='22' fill='%23FFC72C'/%3E%3Crect x='96' y='14' width='6' height='26' fill='%23FFC72C'/%3E%3Crect x='106' y='20' width='6' height='20' fill='%23FFC72C'/%3E%3Crect x='84' y='40' width='32' height='24' fill='%23DA291C'/%3E%3Crect x='88' y='44' width='24' height='16' fill='%23b81f15'/%3E%3C!-- DRINK --%3E%3Crect x='22' y='86' width='8' height='22' fill='%23FFC72C'/%3E%3Crect x='18' y='74' width='44' height='44' fill='%23ffffff'/%3E%3Crect x='22' y='78' width='36' height='36' fill='%23cfe8ff'/%3E%3Crect x='18' y='74' width='44' height='8' fill='%23DA291C'/%3E%3C/svg%3E");
+
+  /* (3.2) Μεγαλύτερο pattern για να φαίνεται έντονα */
+  background-size: 180px 180px;
+  background-repeat: repeat;
+
+  /* (3.3) Πιο έντονο “πέρασμα” */
+  opacity: 0.55;
+
+  /* (3.4) Ένα και μοναδικό εφέ: διαγώνια κύλιση */
+  animation: pixelScroll 33s linear infinite;
+}
+
+/* (3.5) Η κίνηση: πάει συνεχόμενα προς τα αριστερά και προς τα κάτω */
+@keyframes pixelScroll{
+  from { background-position: 0 0; }
+  to   { background-position: -900px 650px; }
+}
+
+/* (4) Header */
+.topbar{
+  padding: 16px 0;
+  background: linear-gradient(90deg, rgba(0,0,0,0.10), rgba(0,0,0,0.22));
+  border-bottom: 3px solid rgba(255,199,44,0.75);
+  color: var(--mcd-white);
+}
+
+.brand{
+  font-size: 1.25rem;
+  font-weight: 900;
+  color: var(--mcd-white);
+}
+
+.tagline{
+  color: rgba(255,255,255,0.90);
+  font-size: 0.95rem;
+}
+
+/* (5) Panels */
+.panel{
+  background: rgba(255,255,255,0.94);
+  border: 3px solid rgba(255,199,44,0.95);
+  border-radius: 18px;
+  box-shadow: var(--shadow);
+}
+
+.section-title{
+  font-size: 1.1rem;
+  font-weight: 900;
+  color: var(--mcd-dark);
+}
+
+.search-wrap{ width: min(360px, 100%); }
+
+.hint{
+  display: inline-block;
+  margin-top: 6px;
+  color: rgba(17,17,17,0.65);
+  font-size: 0.85rem;
+}
+
+.form-control-mcd{
+  border: 2px solid rgba(218,41,28,0.35);
+  border-radius: 14px;
+}
+.form-control-mcd:focus{
+  border-color: rgba(218,41,28,0.75);
+  box-shadow: 0 0 0 0.2rem rgba(255,199,44,0.45);
+}
+
+/* (6) Category buttons */
+.category-bar{
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.cat-btn{
+  border: 2px solid rgba(218,41,28,0.35);
+  background: rgba(255,199,44,0.35);
+  color: var(--mcd-dark);
+  padding: 8px 12px;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: 0.18s;
+  font-weight: 900;
+}
+.cat-btn:hover{
+  transform: translateY(-1px);
+  border-color: rgba(218,41,28,0.75);
+}
+.cat-btn.active{
+  background: rgba(255,199,44,0.95);
+  border-color: rgba(218,41,28,0.85);
+}
+
+/* (7) Product cards */
+.product-card{
+  height: 100%;
+  border: 2px solid rgba(218,41,28,0.25);
+  background: rgba(255,255,255,0.98);
+  border-radius: 18px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.product-img{
+  width: 100%;
+  height: 170px;
+
+  /* να μη κόβεται η εικόνα */
+  object-fit: contain;
+
+  /* προαιρετικό: να φαίνεται ωραία το “κενό” γύρω γύρω */
+  background: rgba(255,255,255,0.9);
+
+  display: block;
+}
+
+
+.product-body{
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex: 1;
+}
+
+.product-title{
+  margin: 0;
+  font-weight: 1000;
+  font-size: 1rem;
+}
+
+.product-desc{
+  margin: 0;
+  color: rgba(17,17,17,0.70);
+  font-size: 0.9rem;
+  line-height: 1.35;
+}
+
+.product-footer{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: auto;
+}
+
+.price{
+  font-weight: 1000;
+  color: var(--mcd-red);
+}
+
+/* (8) Buttons */
+.btn-mcd{
+  background: var(--mcd-yellow);
+  color: var(--mcd-dark);
+  border: 2px solid rgba(218,41,28,0.60);
+  font-weight: 1000;
+  border-radius: 14px;
+}
+.btn-mcd:hover{
+  background: #ffd34d;
+  border-color: rgba(218,41,28,0.80);
+}
+
+.btn-mcd-outline{
+  background: transparent;
+  color: #fff;
+  border: 2px solid rgba(255,199,44,0.90);
+  font-weight: 900;
+  border-radius: 14px;
+}
+.btn-mcd-outline:hover{
+  background: rgba(255,199,44,0.18);
+  color: #fff;
+}
+
+.btn-add{
+  border: 2px solid rgba(218,41,28,0.50);
+  background: rgba(255,199,44,0.85);
+  color: var(--mcd-dark);
+  padding: 8px 10px;
+  border-radius: 14px;
+  cursor: pointer;
+  font-weight: 1000;
+}
+.btn-add:hover{
+  background: rgba(255,199,44,0.98);
+}
+
+/* (9) Cart */
+.cart{
+  position: sticky;
+  top: 16px;
+}
+
+.badge-mcd{
+  background: var(--mcd-red);
+  color: var(--mcd-white);
+  border: 2px solid rgba(255,199,44,0.90);
+}
+
+.cart-empty{
+  padding: 12px;
+  border: 2px dashed rgba(218,41,28,0.40);
+  border-radius: 14px;
+  color: rgba(17,17,17,0.72);
+  background: rgba(255,199,44,0.14);
+}
+
+.cart-items{
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-height: 380px;
+  overflow: auto;
+  padding-right: 6px;
+}
+
+.cart-item{
+  display: grid;
+  grid-template-columns: 56px 1fr auto;
+  gap: 10px;
+  padding: 10px;
+  border: 2px solid rgba(218,41,28,0.18);
+  border-radius: 16px;
+  background: rgba(255,255,255,0.98);
+}
+
+.cart-item img{
+  width: 56px;
+  height: 56px;
+  object-fit: cover;
+  border-radius: 12px;
+  border: 2px solid rgba(255,199,44,0.80);
+}
+
+.cart-item-title{
+  margin: 0;
+  font-weight: 1000;
+  font-size: 0.95rem;
+}
+
+.cart-item-sub{
+  margin: 2px 0 0;
+  color: rgba(17,17,17,0.68);
+  font-size: 0.85rem;
+}
+
+.qty-controls{
+  display: grid;
+  align-content: center;
+  gap: 6px;
+  justify-items: end;
+}
+
+.qty-row{
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.qty-btn{
+  width: 32px;
+  height: 32px;
+  border-radius: 12px;
+  border: 2px solid rgba(218,41,28,0.25);
+  background: rgba(255,199,44,0.45);
+  color: var(--mcd-dark);
+  cursor: pointer;
+  font-weight: 1000;
+}
+.qty-btn:hover{
+  border-color: rgba(218,41,28,0.70);
+  background: rgba(255,199,44,0.70);
+}
+
+.qty-num{
+  min-width: 18px;
+  text-align: center;
+  font-weight: 1000;
+  color: var(--mcd-dark);
+}
+
+.item-total{
+  font-weight: 1000;
+  color: var(--mcd-red);
+  font-size: 0.95rem;
+}
+
+.hr-mcd{
+  border-top: 2px solid rgba(218,41,28,0.22);
+}
+
+.total{
+  font-weight: 1000;
+  font-size: 1.15rem;
+  color: var(--mcd-red);
+}
+
+.note{
+  color: rgba(17,17,17,0.60);
+  font-size: 0.85rem;
+}
+
+/* (10) Modal styling */
+.modal-mcd{
+  border: 3px solid rgba(255,199,44,0.98);
+  border-radius: 18px;
+  overflow: hidden;
+}
+
+.modal-order-list{
+  border: 2px solid rgba(218,41,28,0.18);
+  border-radius: 14px;
+  padding: 10px;
+  background: rgba(255,199,44,0.14);
+  max-height: 260px;
+  overflow: auto;
+}
+
+.modal-line{
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 8px 6px;
+  border-bottom: 1px dashed rgba(218,41,28,0.25);
+}
+.modal-line:last-child{ border-bottom: none; }
+
+.modal-total{
+  font-weight: 1000;
+  color: var(--mcd-red);
+  font-size: 1.1rem;
+}
+
+.modal-message{
+  border-radius: 14px;
+  padding: 10px 12px;
+  background: rgba(218,41,28,0.10);
+  border: 2px solid rgba(218,41,28,0.25);
+  font-weight: 800;
+}
+/* Προαιρετικό: πιο “McD” look στο dropdown */
+.form-select.form-control-mcd{
+  border: 2px solid rgba(218,41,28,0.35);
+  border-radius: 14px;
+}
+.form-select.form-control-mcd:focus{
+  border-color: rgba(218,41,28,0.75);
+  box-shadow: 0 0 0 0.2rem rgba(255,199,44,0.45);
+}

@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Καλωσόρισες στο Food Order Demo</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+
+  <style>
+    /* (1) Φόντο ίδιο με order.html */
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      text-align: center;
+      overflow: hidden;
+    }
+
+    /* (2) Main menu bar */
+    .main-menu {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      padding: 14px 0;
+      background: rgba(0, 0, 0, 0.15);
+      border-bottom: 3px solid rgba(255,199,44,0.75);
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      backdrop-filter: blur(4px);
+    }
+
+    .main-menu a {
+      text-decoration: none;
+      font-weight: 900;
+      color: var(--mcd-white);
+      background: rgba(255,199,44,0.25);
+      padding: 8px 18px;
+      border-radius: 999px;
+      border: 2px solid rgba(255,199,44,0.6);
+      transition: all 0.25s ease;
+    }
+
+    .main-menu a:hover {
+      background: rgba(255,199,44,0.95);
+      color: var(--mcd-dark);
+      transform: translateY(-2px);
+    }
+
+    /* (3) Banner container */
+    .welcome-banner {
+      position: relative;
+      background: rgba(255, 255, 255, 0.93);
+      border: 3px solid rgba(255,199,44,0.9);
+      border-radius: 24px;
+      box-shadow: var(--shadow);
+      padding: 50px 70px;
+      transition: all 0.35s ease;
+      cursor: pointer;
+    }
+
+    /* (4) Hover animation */
+    .welcome-banner:hover {
+      transform: scale(1.06);
+      background: rgba(255, 255, 255, 1);
+      box-shadow: 0 0 40px rgba(255, 199, 44, 0.65);
+    }
+
+    /* (5) Κείμενα */
+    .welcome-banner h1 {
+      font-size: 2.4rem;
+      font-weight: 1000;
+      color: var(--mcd-red);
+      margin-bottom: 14px;
+    }
+
+    .welcome-banner p {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: rgba(17, 17, 17, 0.8);
+      margin-bottom: 0;
+    }
+
+    /* (6) Burger εικονίδιο */
+    .welcome-burger {
+      font-size: 4rem;
+      display: inline-block;
+      animation: bounceBurger 1.5s infinite;
+    }
+
+    @keyframes bounceBurger {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-12px); }
+    }
+  </style>
+</head>
+<body>
+  <div class="pixel-bg" aria-hidden="true"></div>
+
+  <!-- (A) Main navigation bar -->
+  <nav class="main-menu">
+    <a href="#">Αρχική</a>
+    <a href="#">Η Εταιρία Μας</a>
+    <a href="#">Γνωρίστε μας</a>
+    <a href="#">Επικοινωνία</a>
+  </nav>
+
+  <!-- (B) Center banner -->
+  <a href="order.html" class="text-decoration-none">
+    <div class="welcome-banner">
+      <div class="welcome-burger">🍔</div>
+      <h1>Παράγγειλε τώρα!</h1>
+      <p>Κάνε click εδώ και ετοιμάσου για λαχταριστές επιλογές 🍟</p>
+    </div>
+  </a>
+</body>
+</html>
