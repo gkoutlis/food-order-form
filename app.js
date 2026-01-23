@@ -1,48 +1,48 @@
 // app.js
-// Τι κάνει αυτό το αρχείο:
-// - Κρατάει τα προϊόντα (δεδομένα).
-// - Εμφανίζει κατηγορίες/προϊόντα.
-// - Διαχειρίζεται το καλάθι (add, +/-, σύνολα).
-// - Αποθηκεύει το καλάθι σε localStorage.
-// - Ανοίγει modal επιβεβαίωσης και ολοκληρώνει demo παραγγελία.
+// What this file does:
+// - Holds the products (data).
+// - Displays categories/products.
+// - Manages the cart (add, +/-, totals).
+// - Saves the cart to localStorage.
+// - Opens confirmation modal and completes demo order.
 
-// (1) Δεδομένα προϊόντων
-// - Κάθε προϊόν έχει: id, category, name, desc, price, img
-// - Φρόντισε οι εικόνες να υπάρχουν στον φάκελο images/
+// (1) Product data
+// - Each product has: id, category, name, desc, price, img
+// - Make sure the images exist in the images/ folder
 const PRODUCTS = [
-  // (1A) ΚΥΡΙΩΣ
+  // (1A) MAINS
   { id: "m1", category: "Κυρίως", name: "Cheeseburger", desc: "Ζουμερό μπιφτέκι, cheddar, μαρούλι, ντομάτα, σως.", price: 7.90, img: "images/burger.jpg" },
   { id: "m2", category: "Κυρίως", name: "Μοσχαρίσια", desc: "Μοσχαρίσια μπριζόλα με πατάτες και σος πιπεριού.", price: 14.50, img: "images/steak.jpg" },
   { id: "m3", category: "Κυρίως", name: "Caesar Salad", desc: "Κοτόπουλο, παρμεζάνα, κρουτόν, caesar dressing.", price: 8.20, img: "images/salad.jpg" },
 
-  // (1B) ΟΡΕΚΤΙΚΑ
+  // (1B) APPETIZERS
   { id: "a1", category: "Ορεκτικά", name: "Πατατούλες", desc: "Τραγανές πατάτες με αλάτι και ρίγανη.", price: 3.20, img: "images/fries.jpg" },
   { id: "a2", category: "Ορεκτικά", name: "Κοτομπουκές", desc: "6 τεμ. nuggets με sauce επιλογής.", price: 4.60, img: "images/nuggets.jpg" },
   { id: "a3", category: "Ορεκτικά", name: "Τζατζίκι", desc: "Μια μερίδα τζατζίκι με extra σκόρδο.", price: 2.60, img: "images/tzatziki.jpg" },
 
-  // (1C) ΠΟΤΑ
+  // (1C) DRINKS
   { id: "d1", category: "Ποτά", name: "Coca-Cola 330ml", desc: "Αναψυκτικό με ανθρακικό.", price: 1.80, img: "images/cola.jpg" },
   { id: "d2", category: "Ποτά", name: "Νερό 500ml", desc: "Εμφιαλωμένο νερό.", price: 1.00, img: "images/water.jpg" },
   { id: "d3", category: "Ποτά", name: "Μπίρα 500ml", desc: "Ξανθιά μπύρα.", price: 3.50, img: "images/beer.jpg" }
 ];
 
-// (2) Κατηγορίες
-// - Παίρνουμε όλες τις μοναδικές κατηγορίες από τα προϊόντα
-// - Και βάζουμε μπροστά το "Όλα"
+// (2) Categories
+// - We get all unique categories from the products
+// - And put "All" in front
 const CATEGORIES = ["Όλα", ...new Set(PRODUCTS.map(p => p.category))];
 
-// (3) Καλάθι
-// - Το καλάθι είναι ένα object: { productId: qty, ... }
-// - Το φορτώνουμε από localStorage, ώστε να μένει μετά από refresh
+// (3) Cart
+// - The cart is an object: { productId: qty, ... }
+// - We load it from localStorage, so it persists after refresh
 let cart = loadCartFromStorage();
 
-// (4) Κατάσταση φίλτρων UI
-// - activeCategory: ποια κατηγορία είναι επιλεγμένη
-// - searchTerm: τι έχει γράψει ο χρήστης στο search
+// (4) UI filter state
+// - activeCategory: which category is selected
+// - searchTerm: what the user has typed in search
 let activeCategory = "Όλα";
 let searchTerm = "";
 
-// (5) Πιάνουμε τα DOM elements (ό,τι χρειαζόμαστε να ενημερώνουμε)
+// (5) Grab the DOM elements (whatever we need to update)
 const categorySelect = document.getElementById("categorySelect");
 const productsGrid = document.getElementById("productsGrid");
 
@@ -62,26 +62,26 @@ const modalTotal = document.getElementById("modalTotal");
 const modalMessage = document.getElementById("modalMessage");
 const btnModalConfirm = document.getElementById("btnModalConfirm");
 
-// Δημιουργούμε “αντικείμενο” Bootstrap Modal για να το ανοίγουμε/κλείνουμε από JS
+// We create a Bootstrap Modal "object" to open/close it from JS
 const checkoutModal = new bootstrap.Modal(modalEl);
 
 // (7) Listeners / Events
 
-// (7A) Άδειασμα καλαθιού
+// (7A) Clear cart
 btnClearCart.addEventListener("click", () => {
-  cart = {};                 // καθαρίζουμε το object
-  saveCartToStorage();       // αποθήκευση στο localStorage
-  renderCart();              // ξαναζωγραφίζουμε το καλάθι
+  cart = {};                 // clear the object
+  saveCartToStorage();       // save to localStorage
+  renderCart();              // redraw the cart
 });
 
-// (7B) Αναζήτηση προϊόντων (live)
+// (7B) Product search (live)
 searchInput.addEventListener("input", (e) => {
   searchTerm = e.target.value.trim().toLowerCase();
   renderProducts();
 });
 
-// (7C) Προσθήκη προϊόντος από το grid (event delegation)
-// - Αν πατηθεί κουμπί που έχει data-add-id, το παίρνουμε και το προσθέτουμε
+// (7C) Add product from grid (event delegation)
+// - If a button with data-add-id is clicked, we get it and add it
 productsGrid.addEventListener("click", (e) => {
   const btn = e.target.closest("[data-add-id]");
   if (!btn) return;
@@ -90,8 +90,8 @@ productsGrid.addEventListener("click", (e) => {
   addToCart(id);
 });
 
-// (7D) +/- στο καλάθι (event delegation)
-// - Ψάχνουμε αν πατήθηκε κουμπί με data-plus-id ή data-minus-id
+// (7D) +/- in cart (event delegation)
+// - We check if a button with data-plus-id or data-minus-id was clicked
 cartItemsEl.addEventListener("click", (e) => {
   const plus = e.target.closest("[data-plus-id]");
   const minus = e.target.closest("[data-minus-id]");
@@ -100,7 +100,7 @@ cartItemsEl.addEventListener("click", (e) => {
   if (minus) updateQty(minus.getAttribute("data-minus-id"), -1);
 });
 
-// (7E) Checkout -> ανοίγει το modal επιβεβαίωσης
+// (7E) Checkout -> opens the confirmation modal
 btnCheckout.addEventListener("click", () => {
   openCheckoutModal();
 });
@@ -112,36 +112,36 @@ categorySelect.addEventListener("change", (e) => {
 });
 
 
-// (7F) Επιβεβαίωση μέσα στο modal
+// (7F) Confirmation inside the modal
 btnModalConfirm.addEventListener("click", () => {
   const total = calcCartTotal();
 
-  // Αν είναι άδειο, δείχνουμε μήνυμα και δεν προχωράμε
+  // If empty, show message and don't proceed
   if (total <= 0) {
     showModalMessage("Το καλάθι είναι άδειο 🙂");
     return;
   }
 
-  // Demo “ολοκλήρωση”: φτιάχνουμε έναν αριθμό παραγγελίας
+  // Demo "completion": create an order number
   const orderNo = generateOrderNo();
   showModalMessage(`🎉 Η παραγγελία επιβεβαιώθηκε! Αρ. Παραγγελίας: ${orderNo}`);
 
-  // Αδειάζουμε το καλάθι και ενημερώνουμε UI
+  // Clear the cart and update UI
   cart = {};
   saveCartToStorage();
   renderCart();
 
-  // Ανανέωση περιεχομένου modal για να δείξει ότι πλέον είναι κενό
+  // Refresh modal content to show it's now empty
   renderModalSummary();
 });
 
-// (7G) Όταν κλείσει το modal, καθαρίζουμε το μήνυμα
+// (7G) When the modal closes, we clear the message
 modalEl.addEventListener("hidden.bs.modal", () => {
   modalMessage.classList.add("d-none");
   modalMessage.textContent = "";
 });
 
-// (8) Αρχικό render (μόλις ανοίξει η σελίδα)
+// (8) Initial render (as soon as the page opens)
 renderCategories();
 renderProducts();
 renderCart();
@@ -151,11 +151,11 @@ renderCart();
 // (9) RENDER FUNCTIONS
 // =======================
 
-// (9A) Render κατηγοριών
-// - Δημιουργεί κουμπιά για όλες τις κατηγορίες
-// - Βάζει “active” στο επιλεγμένο
+// (9A) Render categories
+// - Creates buttons for all categories
+// - Sets "active" on the selected one
 function renderCategories(){
-  // Γεμίζουμε το dropdown με options
+  // Fill the dropdown with options
   categorySelect.innerHTML = "";
 
   CATEGORIES.forEach(cat => {
@@ -163,7 +163,7 @@ function renderCategories(){
     option.value = cat;
     option.textContent = cat;
 
-    // κρατάμε selected την τρέχουσα κατηγορία
+    // keep selected the current category
     if (cat === activeCategory) option.selected = true;
 
     categorySelect.appendChild(option);
@@ -172,9 +172,9 @@ function renderCategories(){
 
 
 
-// (9B) Render προϊόντων
-// - Φιλτράρει ανά κατηγορία και ανά searchTerm
-// - Φτιάχνει cards με εικόνα, περιγραφή, τιμή, κουμπί προσθήκης
+// (9B) Render products
+// - Filters by category and searchTerm
+// - Creates cards with image, description, price, add button
 function renderProducts(){
   const filtered = PRODUCTS
     .filter(p => activeCategory === "Όλα" ? true : p.category === activeCategory)
@@ -186,19 +186,19 @@ function renderProducts(){
 
   productsGrid.innerHTML = "";
 
-  // Αν δεν βρεθεί τίποτα, δείξε μήνυμα
+  // If nothing found, show message
   if (filtered.length === 0) {
     productsGrid.innerHTML = `
       <div class="col-12">
         <div class="p-3" style="border:2px dashed rgba(218,41,28,0.35); border-radius:14px; background: rgba(255,199,44,0.14);">
-          <p class="m-0 fw-bold">Δεν βρέθηκαν προϊόντα για αυτό το φίλτρο.</p>
+          <p class="m-0 fw-bold">No products found for this filter.</p>
         </div>
       </div>
     `;
     return;
   }
 
-  // Κανονική λίστα προϊόντων
+  // Normal product list
   filtered.forEach(p => {
     const col = document.createElement("div");
     col.className = "col-12 col-md-6";
@@ -221,10 +221,10 @@ function renderProducts(){
   });
 }
 
-// (9C) Render καλαθιού
-// - Αν το cart είναι άδειο, δείχνει το empty block
-// - Αλλιώς δημιουργεί γραμμές με εικόνα, τίτλο, +/- και υποσύνολο
-// - Ενημερώνει total και badge πλήθους
+// (9C) Render cart
+// - If cart is empty, shows the empty block
+// - Otherwise creates rows with image, title, +/- and subtotal
+// - Updates total and count badge
 function renderCart(){
   const items = Object.entries(cart); // [ [id, qty], ... ]
   cartItemsEl.innerHTML = "";
@@ -244,13 +244,13 @@ function renderCart(){
       <img src="${product.img}" alt="${escapeHtml(product.name)}">
       <div>
         <p class="cart-item-title">${escapeHtml(product.name)}</p>
-        <p class="cart-item-sub">${formatEUR(product.price)} / τεμ.</p>
+        <p class="cart-item-sub">${formatEUR(product.price)} / item</p>
       </div>
       <div class="qty-controls">
         <div class="qty-row">
-          <button class="qty-btn" aria-label="Μείωση ποσότητας" data-minus-id="${id}">−</button>
+          <button class="qty-btn" aria-label="Decrease quantity" data-minus-id="${id}">−</button>
           <span class="qty-num">${qty}</span>
-          <button class="qty-btn" aria-label="Αύξηση ποσότητας" data-plus-id="${id}">+</button>
+          <button class="qty-btn" aria-label="Increase quantity" data-plus-id="${id}">+</button>
         </div>
         <div class="item-total">${formatEUR(itemTotal)}</div>
       </div>
@@ -271,15 +271,15 @@ function renderCart(){
 // (10) CART ACTIONS
 // =======================
 
-// (10A) Προσθήκη στο καλάθι
+// (10A) Add to cart
 function addToCart(productId){
   cart[productId] = (cart[productId] || 0) + 1;
   saveCartToStorage();
   renderCart();
 }
 
-// (10B) Αλλαγή ποσότητας (+1 ή -1)
-// - Αν πάει στο 0, αφαιρείται εντελώς
+// (10B) Change quantity (+1 or -1)
+// - If it goes to 0, it is removed completely
 function updateQty(productId, delta){
   const current = cart[productId] || 0;
   const next = current + delta;
@@ -296,8 +296,8 @@ function updateQty(productId, delta){
 // (11) MODAL FUNCTIONS
 // =======================
 
-// (11A) Άνοιγμα modal
-// - Γεμίζει το modal με σύνοψη και το εμφανίζει
+// (11A) Open modal
+// - Fills the modal with summary and displays it
 function openCheckoutModal(){
   renderModalSummary();
   modalMessage.classList.add("d-none");
@@ -305,13 +305,13 @@ function openCheckoutModal(){
   checkoutModal.show();
 }
 
-// (11B) Γέμισμα modal με σύνοψη παραγγελίας
+// (11B) Fill modal with order summary
 function renderModalSummary(){
   const items = Object.entries(cart);
   modalOrderList.innerHTML = "";
 
   if (items.length === 0) {
-    modalOrderList.innerHTML = `<div class="fw-bold">Το καλάθι είναι άδειο.</div>`;
+    modalOrderList.innerHTML = `<div class="fw-bold">The cart is empty.</div>`;
     modalTotal.textContent = formatEUR(0);
     return;
   }
@@ -326,7 +326,7 @@ function renderModalSummary(){
     line.innerHTML = `
       <div>
         <div class="fw-bold">${escapeHtml(product.name)}</div>
-        <div style="opacity:.75">x ${qty} • ${formatEUR(product.price)} / τεμ.</div>
+        <div style="opacity:.75">x ${qty} • ${formatEUR(product.price)} / item</div>
       </div>
       <div class="fw-bold" style="color:#DA291C">${formatEUR(product.price * qty)}</div>
     `;
@@ -337,7 +337,7 @@ function renderModalSummary(){
   modalTotal.textContent = formatEUR(calcCartTotal());
 }
 
-// (11C) Εμφάνιση μηνύματος μέσα στο modal
+// (11C) Display message inside the modal
 function showModalMessage(text){
   modalMessage.textContent = text;
   modalMessage.classList.remove("d-none");
@@ -348,7 +348,7 @@ function showModalMessage(text){
 // (12) HELPERS
 // =======================
 
-// (12A) Υπολογισμός συνολικού κόστους
+// (12A) Calculate total cost
 function calcCartTotal(){
   let sum = 0;
   for (const [id, qty] of Object.entries(cart)) {
@@ -359,24 +359,24 @@ function calcCartTotal(){
   return sum;
 }
 
-// (12B) Υπολογισμός πλήθους items (άθροισμα ποσοτήτων)
+// (12B) Calculate number of items (sum of quantities)
 function calcCartItemsCount(){
   let count = 0;
   for (const qty of Object.values(cart)) count += qty;
   return count;
 }
 
-// (12C) Μορφοποίηση ευρώ στα ελληνικά
+// (12C) Format euros in Greek
 function formatEUR(value){
   return value.toLocaleString("el-GR", { style: "currency", currency: "EUR" });
 }
 
-// (12D) Αποθήκευση καλαθιού σε localStorage
+// (12D) Save cart to localStorage
 function saveCartToStorage(){
   localStorage.setItem("datalabs_cart", JSON.stringify(cart));
 }
 
-// (12E) Φόρτωση καλαθιού από localStorage
+// (12E) Load cart from localStorage
 function loadCartFromStorage(){
   try{
     const raw = localStorage.getItem("datalabs_cart");
@@ -386,7 +386,7 @@ function loadCartFromStorage(){
   }
 }
 
-// (12F) Προστασία από “σπασμένα” HTML strings (ασφάλεια/σωστό rendering)
+// (12F) Protection from "broken" HTML strings (security/correct rendering)
 function escapeHtml(str){
   return String(str)
     .replaceAll("&", "&amp;")
@@ -396,7 +396,7 @@ function escapeHtml(str){
     .replaceAll("'", "&#039;");
 }
 
-// (12G) Τυχαίος αριθμός παραγγελίας (demo)
+// (12G) Random order number (demo)
 function generateOrderNo(){
   const n = Math.floor(100000 + Math.random() * 900000);
   return `DL-${n}`;

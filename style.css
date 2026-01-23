@@ -1,11 +1,11 @@
 /* style.css
-  Τι κάνει αυτό το αρχείο:
-  - Ορίζει χρωματική παλέτα τύπου McDonald's (κόκκινο/κίτρινο).
-  - Σχεδιάζει τα panels, κάρτες προϊόντων, καλάθι.
-  - Φτιάχνει έντονο pixel-art background με 1 μόνο animation (scroll).
+  What this file does:
+  - Defines a McDonald's-style color palette (red/yellow).
+  - Designs the panels, product cards, cart.
+  - Creates an intense pixel-art background with only 1 animation (scroll).
 */
 
-/* (1) Βασικά χρώματα/μεταβλητές (McDonald's vibe) */
+/* (1) Basic colors/variables (McDonald's vibe) */
 :root{
   --mcd-red: #DA291C;
   --mcd-yellow: #FFC72C;
@@ -15,14 +15,14 @@
   --shadow: 0 16px 40px rgba(0,0,0,0.20);
 }
 
-/* (2) Γενικές ρυθμίσεις */
+/* (2) General settings */
 *{ box-sizing: border-box; }
 
 body{
   margin: 0;
   font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
 
-  /* (2.1) Κόκκινο φόντο με λίγο “φως” από κίτρινο */
+  /* (2.1) Red background with some "light" from yellow */
   background:
     radial-gradient(900px 520px at 12% 10%, rgba(255,199,44,0.35), transparent 60%),
     radial-gradient(900px 520px at 90% 30%, rgba(255,199,44,0.25), transparent 60%),
@@ -35,29 +35,29 @@ body{
 .container-max{ max-width: 1200px; }
 
 /* (3) Pixel-art background (1 layer, 1 animation)
-   - “Πιο έντονο”: μεγαλύτερη opacity, πιο μεγάλα sprites, πιο γρήγορη κύλιση.
-   - “Πιο καθαρό pixel art”: SVG με shape-rendering=crispEdges, χωρίς blur/swirl. */
+   - "More intense": higher opacity, larger sprites, faster scrolling.
+   - "Cleaner pixel art": SVG with shape-rendering=crispEdges, no blur/swirl. */
 .pixel-bg{
   position: fixed;
   inset: 0;
   z-index: -1;
   pointer-events: none;
 
-  /* (3.1) Ένα SVG tile που περιέχει burger + fries + drink σε καθαρό pixel στυλ */
+  /* (3.1) An SVG tile containing burger + fries + drink in clean pixel style */
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='128' height='128' shape-rendering='crispEdges'%3E%3Crect width='128' height='128' fill='none'/%3E%3C!-- BURGER --%3E%3Crect x='18' y='22' width='44' height='10' fill='%23FFC72C'/%3E%3Crect x='18' y='32' width='44' height='6' fill='%23E0A800'/%3E%3Crect x='18' y='38' width='44' height='4' fill='%23DA291C'/%3E%3Crect x='18' y='42' width='44' height='8' fill='%237a4a21'/%3E%3Crect x='18' y='50' width='44' height='8' fill='%23FFC72C'/%3E%3C!-- FRIES --%3E%3Crect x='86' y='18' width='6' height='22' fill='%23FFC72C'/%3E%3Crect x='96' y='14' width='6' height='26' fill='%23FFC72C'/%3E%3Crect x='106' y='20' width='6' height='20' fill='%23FFC72C'/%3E%3Crect x='84' y='40' width='32' height='24' fill='%23DA291C'/%3E%3Crect x='88' y='44' width='24' height='16' fill='%23b81f15'/%3E%3C!-- DRINK --%3E%3Crect x='22' y='86' width='8' height='22' fill='%23FFC72C'/%3E%3Crect x='18' y='74' width='44' height='44' fill='%23ffffff'/%3E%3Crect x='22' y='78' width='36' height='36' fill='%23cfe8ff'/%3E%3Crect x='18' y='74' width='44' height='8' fill='%23DA291C'/%3E%3C/svg%3E");
 
-  /* (3.2) Μεγαλύτερο pattern για να φαίνεται έντονα */
+  /* (3.2) Larger pattern to appear intense */
   background-size: 180px 180px;
   background-repeat: repeat;
 
-  /* (3.3) Πιο έντονο “πέρασμα” */
+  /* (3.3) More intense "passage" */
   opacity: 0.55;
 
-  /* (3.4) Ένα και μοναδικό εφέ: διαγώνια κύλιση */
+  /* (3.4) One and only effect: diagonal scrolling */
   animation: pixelScroll 33s linear infinite;
 }
 
-/* (3.5) Η κίνηση: πάει συνεχόμενα προς τα αριστερά και προς τα κάτω */
+/* (3.5) The movement: goes continuously to the left and down */
 @keyframes pixelScroll{
   from { background-position: 0 0; }
   to   { background-position: -900px 650px; }
@@ -155,10 +155,10 @@ body{
   width: 100%;
   height: 170px;
 
-  /* να μη κόβεται η εικόνα */
+  /* so the image doesn't get cropped */
   object-fit: contain;
 
-  /* προαιρετικό: να φαίνεται ωραία το “κενό” γύρω γύρω */
+  /* optional: to make the "empty" space around look nice */
   background: rgba(255,255,255,0.9);
 
   display: block;
@@ -390,7 +390,7 @@ body{
   border: 2px solid rgba(218,41,28,0.25);
   font-weight: 800;
 }
-/* Προαιρετικό: πιο “McD” look στο dropdown */
+/* Optional: more "McD" look on the dropdown */
 .form-select.form-control-mcd{
   border: 2px solid rgba(218,41,28,0.35);
   border-radius: 14px;
