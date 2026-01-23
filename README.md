@@ -1,17 +1,16 @@
 # 🍔 Food Order Form (Demo)
 
-Μια διαδραστική φόρμα παραγγελίας (menu + cart + checkout modal) με **Vanilla JavaScript**, φτιαγμένη για εξάσκηση σε **DOM**, **events** και βασικό **state management**. ✅
+An interactive food ordering form (menu + cart + checkout modal) built with **Vanilla JavaScript**. Designed to practice **DOM manipulation**, **event handling**, and basic **state management**. ✅
 
 ---
 
 ## ✨ Features
-- 🧾 Προβολή προϊόντων ανά κατηγορία
-- 🔎 Αναζήτηση προϊόντων
-- 🛒 Καλάθι με αύξηση/μείωση ποσότητας (+/−)
-- 💾 Αποθήκευση καλαθιού με `localStorage` (μένει μετά από refresh)
-- 💶 Υπολογισμός συνόλου + badge πλήθους ειδών
-- ✅ Checkout modal με σύνοψη παραγγελίας
-
+- 🧾 Browse products by category
+- 🔎 Product search functionality
+- 🛒 Dynamic shopping cart with quantity controls (+/−)
+- 💾 Data persistence using `localStorage` (cart remains after refresh)
+- 💶 Real-time total calculation + item count badge
+- ✅ Checkout modal with order summary
 
 ---
 ## 📸 Screenshots
@@ -19,12 +18,13 @@
 
 ---
 
-## 🧠 AI βοήθεια κατά την υλοποίηση
-Κατά την ανάπτυξη του project χρησιμοποιήθηκε **περιορισμένη βοήθεια από AI** για:
-- 💡 ιδέες/προτάσεις βελτίωσης UI
-- 🧠 μικρές κατευθύνσεις στη λογική (state/ροή)
+## 🧠 AI Assistance Transparency
+During the development of this project, **limited AI assistance** was utilized for:
+- 💡 UI improvement ideas/suggestions
+- 🧠 Minor guidance on logic flow and state structure
 
-Ο κώδικας στη συνέχεια **ελέγχθηκε, προσαρμόστηκε και τεκμηριώθηκε** ώστε να υπάρχει πλήρης κατανόηση της υλοποίησης και της ροής της εφαρμογής. 🧩
+The code was subsequently **reviewed, adapted, and documented** by the developer to ensure a complete and deep understanding of the implementation. 🧩
+
 ---
 
 ## 🧰 Tech Stack
@@ -36,6 +36,7 @@
 ---
 
 ## 🚀 Run Locally
-1. Κάνε clone το repo:
+
+1. Clone the repository:
    ```bash
    git clone git@github.com:gkoutlis/food-order-form.git
